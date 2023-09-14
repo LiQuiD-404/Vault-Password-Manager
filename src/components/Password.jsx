@@ -1,15 +1,20 @@
+import { useEffect } from 'react';
 import React from 'react'
 import { gsap } from "gsap";
 
 
 function Password() {
-    function test() {
-        let pass = document.getElementById('text').value;
-        console.log(pass);
-        if (pass === '111') {
-            document.getElementById('head').style.backgroundColor = '#f87171'
+    useEffect(() => {
+        session();
+    }, []); 
 
-            gsap.to('#test',{
+    function login() {
+        let pass = document.getElementById('text').value;
+        document.getElementById('text').value = ""
+        if (pass === 'admin@123') {
+            document.getElementById('head').style.backgroundColor = '#f87171'
+            localStorage.setItem("pass",pass);
+            gsap.to('#login',{
                 height: 0,
                 duration:0.8
             })
@@ -17,10 +22,23 @@ function Password() {
         }
     }
 
+     function session() {
+        if (localStorage.getItem("pass") === "admin@123") {
+            const loginElement = document.getElementById('login');
+            if (loginElement) {
+                loginElement.style.display = "none";
+                document.getElementById('head').style.backgroundColor = '#f87171'
+            }
+        }
+    }
+
+
+
     function checkelem(e) {
         let row = e.target.parentNode.parentNode;
         row.style.display = "none"
     }
+
     let i = 1;
     function generate() {
         let usrname = ""
@@ -35,7 +53,7 @@ function Password() {
         let data2 = document.createElement("td");
         data2.style.border = "1px solid #172554"
         let data3 = document.createElement("td");
-        data2.style.border = "1px solid #172554"
+        data3.style.border = "1px solid #172554"
         let del = document.createElement("button")
         del.textContent = "Delete"
         del.style.backgroundColor = "#172554"
@@ -54,6 +72,15 @@ function Password() {
 
         document.querySelector('#table').appendChild(row)
 
+    }
+
+    function logout(){
+        localStorage.removeItem("pass");
+        const loginElement = document.getElementById('login');
+        loginElement.style.display = "block";
+        loginElement.style.height = "100vh";
+        document.getElementById('head').style.backgroundColor = '#06b6d4'
+        
     }
 
     return (
@@ -77,13 +104,18 @@ function Password() {
                         </tr>
                     </table>
                     <button className='border-2 border-gray-800 bg-lime-400 px-3 py-2 my-4' onClick={generate}>Add Credentials</button>
+                    <div className="footer absolute bottom-0 right-0 p-4 pr-4">
+                        <button onClick={logout}>Logout</button>
+                    </div>
                 </div>
 
-                <h1 id="test" className="absolute overflow-hidden flex items-center justify-center gap-6 flex-wrap bottom-0 h-[100vh] w-screen ">
+                <h1 id="login" className="login_body absolute overflow-hidden flex items-center justify-center gap-6 flex-wrap bottom-0 h-[100vh] w-screen ">
                     <div id="test1" className={` card bg-cyan-500 flex items-center justify-center h-[100vh] w-screen`}>
                         <textarea className='px-4 py-2 rounded-lg resize-none' name="password" id="text" cols="17" rows="1" placeholder='Enter Password'></textarea>
-                        <button className="mx-2 px-4 py-2 bg-white rounded-lg" onClick={test}>Login</button>
+                        <button className="mx-2 px-4 py-2 bg-white rounded-lg" onClick={login}>Login</button>
+
                     </div>
+                    
                 </h1>
             </div>
 
