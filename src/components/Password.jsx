@@ -34,45 +34,68 @@ function Password() {
 
 
 
-    function checkelem(e) {
-        let row = e.target.parentNode.parentNode;
-        row.style.display = "none"
-    }
+    let i = 0; // Initialize the index for unique button IDs
 
-    let i = 1;
-    function generate() {
-        let usrname = ""
-        let usrpass = ""
-        usrname = prompt("Enter your username")
-        usrpass = prompt("Enter your password")
+function generate() {
+    let usrname = "";
+    let usrpass = "";
+    usrname = prompt("Enter your username");
+    usrpass = prompt("Enter your password");
+    
+    if (usrname && usrpass) {
+        // Create an object to represent the credentials
+        const credentials = {
+            username: usrname,
+            password: usrpass,
+        };
+
+        // Store the credentials in local storage with a unique key
+        localStorage.setItem(`credential_${i}`, JSON.stringify(credentials));
+
+        // Create the table row and display the data
         let row = document.createElement("tr");
-        row.style.border = "1px solid #172554"
-        row.style.textAlign = "center"
+        row.style.border = "1px solid #172554";
+        row.style.textAlign = "center";
+        
         let data1 = document.createElement("td");
-        data1.style.border = "1px solid #172554"
+        data1.style.border = "1px solid #172554";
         let data2 = document.createElement("td");
-        data2.style.border = "1px solid #172554"
+        data2.style.border = "1px solid #172554";
         let data3 = document.createElement("td");
-        data3.style.border = "1px solid #172554"
-        let del = document.createElement("button")
-        del.textContent = "Delete"
-        del.style.backgroundColor = "#172554"
-        del.style.color = "#fff"
-        del.style.padding = "0rem 1rem"
-        del.style.margin = "0.2rem 1rem"
-        del.style.borderRadius = "0.3rem"
-        del.addEventListener("click", checkelem);
-        del.setAttribute('id', i++)
-        data3.appendChild(del)
-        data1.innerHTML = usrname
-        data2.innerHTML = usrpass
+        data3.style.border = "1px solid #172554";
+        
+        let del = document.createElement("button");
+        del.textContent = "Delete";
+        del.style.backgroundColor = "#172554";
+        del.style.color = "#fff";
+        del.style.padding = "0rem 1rem";
+        del.style.margin = "0.2rem 1rem";
+        del.style.borderRadius = "0.3rem";
+        del.addEventListener("click", deleteCredentials);
+        del.setAttribute('id', i++);
+        
+        data3.appendChild(del);
+        data1.innerHTML = usrname;
+        data2.innerHTML = usrpass;
+        
         row.appendChild(data1);
         row.appendChild(data2);
         row.appendChild(data3);
 
-        document.querySelector('#table').appendChild(row)
-
+        document.querySelector('#table').appendChild(row);
+    } else {
+        alert("Please enter both username and password.");
     }
+}
+
+// Function to delete credentials from both the table and local storage
+function deleteCredentials(e) {
+    localStorage.removeItem(`credential_${e.target.id}`);
+    
+    // Remove the row from the table
+    let row = e.target.parentNode.parentNode;
+        row.style.display = "none"
+}
 
     function logout(){
         localStorage.removeItem("pass");
