@@ -113,17 +113,17 @@ function deleteCredentials(e) {
             <div className="main flex flex-col items-center justify-center">
                 <div id='head' className='absolute z-50 top-0 bg-cyan-500 flex items-center justify-center mt-10'>
 
-                    <h1 className=" text-3xl font-extrabold leading-none tracking-tight text-gray-900 lg:text-5xl">Welcome to <mark className="px-6 text-black bg-lime-400 rounded">Vault</mark> - Password Manager</h1>
+                    <h1 className=" text-xl text-center font-extrabold leading-none tracking-tight text-gray-900 sm:text-3xl lg:text-5xl">Welcome to <mark className="px-6 text-black bg-lime-400 rounded">Vault</mark> - Password Manager</h1>
 
                 </div>
 
-                <div className="relative password flex flex-col items-center justify-center h-screen w-screen bg-red-400">
+                <div className=" relative password flex flex-col items-center justify-center h-screen w-screen bg-red-400">
                     <table className='my-2' id='table' style={
                         { border: "1px solid #172554" }}>
                         <tr style={{ border: "1px solid #172554" }}>
-                            <th className='px-16' style={{ border: "1px solid #172554" }}>Username</th>
-                            <th className='px-16' style={{ border: "1px solid #172554" }}>Password</th>
-                            <th className='px-8'>Action</th>
+                            <th className='px-4 sm:px-16' style={{ border: "1px solid #172554" }}>Username</th>
+                            <th className='px-3 sm:px-16' style={{ border: "1px solid #172554" }}>Password</th>
+                            <th className='px-2 sm:px-16'>Action</th>
                         </tr>
                     </table>
                     <button className='border-2 border-gray-800 bg-lime-400 px-3 py-2 my-4' onClick={generate}>Add Credentials</button>
