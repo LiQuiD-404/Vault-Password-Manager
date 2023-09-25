@@ -44,13 +44,21 @@ function generate() {
     
     if (usrname && usrpass) {
         // Create an object to represent the credentials
-        const credentials = {
-            username: usrname,
-            password: usrpass,
-        };
+        let passwords = localStorage.getItem("credentials");
 
         // Store the credentials in local storage with a unique key
-        localStorage.setItem(`credential_${i}`, JSON.stringify(credentials));
+        if (passwords == null) {
+            let password = []
+            password.push({ "username": usrname, "password": usrpass });
+            localStorage.setItem("credentials", JSON.stringify(password))
+            alert("First Credentials Added")
+        }
+        else {
+            let cred = JSON.parse(localStorage.getItem("credentials"))
+            cred.push({ "username": usrname, "password": usrpass });
+            localStorage.setItem("credentials", JSON.stringify(cred))
+            alert("Credentials Added")
+        }
 
         // Create the table row and display the data
         let row = document.createElement("tr");
@@ -108,7 +116,6 @@ function deleteCredentials(e) {
 
     return (
         <>
-
 
             <div className="main flex flex-col items-center justify-center">
                 <div id='head' className='absolute z-50 top-0 bg-cyan-500 flex items-center justify-center mt-10'>
