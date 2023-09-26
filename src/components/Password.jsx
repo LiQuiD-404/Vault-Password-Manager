@@ -6,23 +6,23 @@ import { gsap } from "gsap";
 function Password() {
     useEffect(() => {
         session();
-    }, []); 
+    }, []);
 
     function login() {
         let pass = document.getElementById('text').value;
         document.getElementById('text').value = ""
         if (pass === 'admin@123') {
             document.getElementById('head').style.backgroundColor = '#f87171'
-            localStorage.setItem("pass",pass);
-            gsap.to('#login',{
+            localStorage.setItem("pass", pass);
+            gsap.to('#login', {
                 height: 0,
-                duration:0.8
+                duration: 0.8
             })
 
         }
     }
 
-     function session() {
+    function session() {
         if (localStorage.getItem("pass") === "admin@123") {
             const loginElement = document.getElementById('login');
             if (loginElement) {
@@ -36,82 +36,93 @@ function Password() {
 
     let i = 0; // Initialize the index for unique button IDs
 
-function generate() {
-    let usrname = "";
-    let usrpass = "";
-    usrname = prompt("Enter your username");
-    usrpass = prompt("Enter your password");
-    
-    if (usrname && usrpass) {
-        // Create an object to represent the credentials
-        let passwords = localStorage.getItem("credentials");
 
-        // Store the credentials in local storage with a unique key
-        if (passwords == null) {
-            let password = []
-            password.push({ "username": usrname, "password": usrpass });
-            localStorage.setItem("credentials", JSON.stringify(password))
-            alert("First Credentials Added")
+
+    function generate() {
+        let usrname = "";
+        let usrpass = "";
+        usrname = prompt("Enter your username");
+        usrpass = prompt("Enter your password");
+
+        if (usrname && usrpass) {
+            // Create an object to represent the credentials
+            let passwords = localStorage.getItem("credentials");
+
+            // Store the credentials in local storage with a unique key
+            if (passwords == null) {
+                let password = []
+                password.push({ "id": i, "username": usrname, "password": usrpass });
+                localStorage.setItem("credentials", JSON.stringify(password))
+                alert("First Credentials Added")
+            }
+            else {
+                let cred = JSON.parse(localStorage.getItem("credentials"))
+                cred.push({ "id": i, "username": usrname, "password": usrpass });
+                localStorage.setItem("credentials", JSON.stringify(cred))
+                alert("Credentials Added")
+            }
+
+            // Create the table row and display the data
+            let row = document.createElement("tr");
+            row.style.border = "1px solid #172554";
+            row.style.textAlign = "center";
+
+            let data1 = document.createElement("td");
+            data1.style.border = "1px solid #172554";
+            let data2 = document.createElement("td");
+            data2.style.border = "1px solid #172554";
+            let data3 = document.createElement("td");
+            data3.style.border = "1px solid #172554";
+
+            let del = document.createElement("button");
+            del.textContent = "Delete";
+            del.style.backgroundColor = "#172554";
+            del.style.color = "#fff";
+            del.style.padding = "0rem 1rem";
+            del.style.margin = "0.2rem 1rem";
+            del.style.borderRadius = "0.3rem";
+            del.addEventListener("click", deleteCredentials);
+            del.setAttribute('id', i++);
+
+            data3.appendChild(del);
+            data1.innerHTML = usrname;
+            data2.innerHTML = usrpass;
+
+            row.appendChild(data1);
+            row.appendChild(data2);
+            row.appendChild(data3);
+
+            document.querySelector('#table').appendChild(row);
+        } else {
+            alert("Please enter both username and password.");
         }
-        else {
-            let cred = JSON.parse(localStorage.getItem("credentials"))
-            cred.push({ "username": usrname, "password": usrpass });
-            localStorage.setItem("credentials", JSON.stringify(cred))
-            alert("Credentials Added")
-        }
-
-        // Create the table row and display the data
-        let row = document.createElement("tr");
-        row.style.border = "1px solid #172554";
-        row.style.textAlign = "center";
-        
-        let data1 = document.createElement("td");
-        data1.style.border = "1px solid #172554";
-        let data2 = document.createElement("td");
-        data2.style.border = "1px solid #172554";
-        let data3 = document.createElement("td");
-        data3.style.border = "1px solid #172554";
-        
-        let del = document.createElement("button");
-        del.textContent = "Delete";
-        del.style.backgroundColor = "#172554";
-        del.style.color = "#fff";
-        del.style.padding = "0rem 1rem";
-        del.style.margin = "0.2rem 1rem";
-        del.style.borderRadius = "0.3rem";
-        del.addEventListener("click", deleteCredentials);
-        del.setAttribute('id', i++);
-        
-        data3.appendChild(del);
-        data1.innerHTML = usrname;
-        data2.innerHTML = usrpass;
-        
-        row.appendChild(data1);
-        row.appendChild(data2);
-        row.appendChild(data3);
-
-        document.querySelector('#table').appendChild(row);
-    } else {
-        alert("Please enter both username and password.");
     }
-}
 
-// Function to delete credentials from both the table and local storage
-function deleteCredentials(e) {
-    localStorage.removeItem(`credential_${e.target.id}`);
-    
-    // Remove the row from the table
-    let row = e.target.parentNode.parentNode;
+    // Function to delete credentials from both the table and local storage
+    function deleteCredentials(e) {
+        let tobedeleted = e.target.id;
+        console.log(typeof(tobedeleted));
+        const storedData = JSON.parse(localStorage.getItem('credentials'));
+        const entryToDeleteID = tobedeleted; 
+        let newjson = []
+        for (let index = 0; index < storedData.length; index++) {
+            const element = storedData[index].id;
+            if(element != tobedeleted){
+                newjson.push(storedData[index]);
+            }
+        }
+        localStorage.setItem('credentials', JSON.stringify(newjson));
+        let row = e.target.parentNode.parentNode;
         row.style.display = "none"
-}
+    }
 
-    function logout(){
+    function logout() {
         localStorage.removeItem("pass");
         const loginElement = document.getElementById('login');
         loginElement.style.display = "block";
         loginElement.style.height = "100vh";
         document.getElementById('head').style.backgroundColor = '#06b6d4'
-        
+
     }
 
     return (
@@ -145,7 +156,7 @@ function deleteCredentials(e) {
                         <button className="mx-2 px-4 py-2 bg-white rounded-lg" onClick={login}>Login</button>
 
                     </div>
-                    
+
                 </h1>
             </div>
 
